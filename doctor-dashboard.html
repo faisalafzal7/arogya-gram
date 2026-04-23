@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arogya Gram - Doctor Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        .sidebar {
+            transition: all 0.3s ease;
+        }
+        .appointment-card {
+            border-left: 4px solid #166534;
+        }
+        .patient-card {
+            border-top: 3px solid #1e40af;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="sidebar bg-green-800 text-white w-64 min-h-screen fixed hidden md:block">
+            <div class="p-4 border-b border-green-900">
+                <div class="flex items-center space-x-2">
+                    <i data-feather="activity" class="w-6 h-6"></i>
+                    <h1 class="text-xl font-bold">Doctor Portal</h1>
+                </div>
+            </div>
+            <div class="p-4">
+                <div class="flex items-center space-x-3 mb-6">
+                    <img src="https://via.placeholder.com/40" alt="Doctor" class="rounded-full w-10 h-10">
+                    <div>
+                        <h3 class="font-medium">Dr. Anil Kumar</h3>
+                        <p class="text-xs opacity-80">Cardiologist</p>
+                    </div>
+                </div>
+                
+                <nav>
+                    <ul class="space-y-2">
+                        <li>
+                            <a href="#" onclick="showPage('dashboard')" class="nav-item flex items-center space-x-3 p-2 rounded-lg bg-green-900">
+                                <i data-feather="home" class="w-5 h-5"></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-900">
+                                <i data-feather="calendar" class="w-5 h-5"></i>
+                                <span>Appointments</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-700">
+                                <i data-feather="users" class="w-5 h-5"></i>
+                                <span>Patients</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-700">
+                                <i data-feather="file-text" class="w-5 h-5"></i>
+                                <span>Prescriptions</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-blue-700">
+                                <i data-feather="clock" class="w-5 h-5"></i>
+                                <span>Availability</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="showPage('profile')" class="nav-item flex items-center space-x-3 p-2 rounded-lg hover:bg-green-700">
+                                <i data-feather="user" class="w-5 h-5"></i>
+                                <span>Profile</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="showPage('settings')" class="nav-item flex items-center space-x-3 p-2 rounded-lg hover:bg-green-700">
+                                <i data-feather="settings" class="w-5 h-5"></i>
+                                <span>Settings</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-blue-700">
+                <a href="index.html" class="w-full flex items-center justify-center space-x-2 bg-white text-green-800 py-2 rounded-lg hover:bg-gray-100">
+                    <i data-feather="log-out" class="w-5 h-5"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-grow md:ml-64">
+            <!-- Mobile Header -->
+            <header class="bg-primary text-white p-4 shadow-md md:hidden">
+                <div class="flex justify-between items-center">
+                    <button id="menuToggle" class="mr-2">
+                        <i data-feather="menu" class="w-6 h-6"></i>
+                    </button>
+                    <div class="flex items-center space-x-2">
+                        <i data-feather="heart" class="w-5 h-5"></i>
+                        <h1 class="text-lg font-bold">Arogya Gram</h1>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <i data-feather="bell" class="w-5 h-5"></i>
+                        <img src="https://via.placeholder.com/30" alt="Doctor" class="rounded-full w-8 h-8">
+                        <a href="index.html" class="text-sm bg-white text-primary px-3 py-1 rounded-md flex items-center">
+                            <i data-feather="log-out" class="w-4 h-4 mr-1"></i> Logout
+                        </a>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Page -->
+            <div id="dashboardPage" class="p-4 md:p-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Doctor Dashboard</h2>
+                
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                    <div class="bg-white rounded-lg p-4 shadow-sm">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-500">Today's Appointments</p>
+                                <h3 class="text-2xl font-bold text-secondary">5</h3>
+                            </div>
+                            <div class="bg-green-100 p-3 rounded-full">
+                                <i data-feather="calendar" class="text-secondary w-6 h-6"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg p-4 shadow-sm">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-500">Pending Prescriptions</p>
+                                <h3 class="text-2xl font-bold text-blue-600">3</h3>
+                            </div>
+                            <div class="bg-blue-100 p-3 rounded-full">
+                                <i data-feather="file-text" class="text-blue-600 w-6 h-6"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg p-4 shadow-sm">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-500">Total Patients</p>
+                                <h3 class="text-2xl font-bold text-purple-600">127</h3>
+                            </div>
+                            <div class="bg-purple-100 p-3 rounded-full">
+                                <i data-feather="users" class="text-purple-600 w-6 h-6"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Today's Appointments -->
+                <section class="mb-8 bg-white rounded-lg shadow-sm p-4">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800">Today's Appointments</h3>
+                        <a href="#" class="text-sm text-primary hover:underline">View All</a>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="appointment-card bg-gray-50 p-4 rounded-lg">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h4 class="font-medium text-gray-800">Rajesh Kumar</h4>
+                                    <p class="text-sm text-gray-600">Male • 45 years • AB+</p>
+                                </div>
+                                <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">10:30 AM</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-600 mt-2">
+                                <i data-feather="file-text" class="w-4 h-4 mr-2"></i>
+                                <span>Follow-up for hypertension</span>
+                            </div>
+                            <div class="flex space-x-2 mt-3">
+                                <button class="text-xs bg-primary text-white px-3 py-1 rounded-md">Start Consultation</button>
+                                <button class="text-xs border border-gray-300 px-3 py-1 rounded-md">View History</button>
+                            </div>
+                        </div>
+                        
+                        <div class="appointment-card bg-gray-50 p-4 rounded-lg">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h4 class="font-medium text-gray-800">Priya Sharma</h4>
+                                    <p class="text-sm text-gray-600">Female • 32 years • B+</p>
+                                </div>
+                                <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded">11:45 AM</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-600 mt-2">
+                                <i data-feather="file-text" class="w-4 h-4 mr-2"></i>
+                                <span>New patient • Chest pain evaluation</span>
+                            </div>
+                            <div class="flex space-x-2 mt-3">
+                                <button class="text-xs bg-primary text-white px-3 py-1 rounded-md">Start Consultation</button>
+                                <button class="text-xs border border-gray-300 px-3 py-1 rounded-md">View History</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Recent Patients -->
+                <section class="bg-white rounded-lg shadow-sm p-4">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800">Recent Patients</h3>
+                        <a href="#" class="text-sm text-primary hover:underline">View All</a>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Patient</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Visit</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Condition</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr class="patient-card">
+                                    <td class="px-4 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 h-10 w-10">
+                                                <img class="h-10 w-10 rounded-full" src="https://via.placeholder.com/40" alt="">
+                                            </div>
+                                            <div class="ml-4">
+                                                <div class="text-sm font-medium text-gray-900">Rajesh Kumar</div>
+                                                <div class="text-sm text-gray-500">45y • AB+</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-900">15 Oct 2023</div>
+                                    </td>
+                                    <td class="px-4 py-4 whitespace-nowrap">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Hypertension</span>
+                                    </td>
+                                    <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <button class="text-primary hover:underline">View</button>
+                                    </td>
+                                </tr>
+                                <tr class="patient-card">
+                                    <td class="px-4 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 h-10 w-10">
+                                                <img class="h-10 w-10 rounded-full" src="https://via.placeholder.com/40" alt="">
+                                            </div>
+                                            <div class="ml-4">
+                                                <div class="text-sm font-medium text-gray-900">Sunita Devi</div>
+                                                <div class="text-sm text-gray-500">60y • O+</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-900">10 Oct 2023</div>
+                                    </td>
+                                    <td class="px-4 py-4 whitespace-nowrap">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Diabetes</span>
+                                    </td>
+                                    <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <button class="text-primary hover:underline">View</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Profile Page -->
+            <div id="profilePage" class="p-4 md:p-6 hidden">
+                <div class="max-w-2xl mx-auto">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Doctor Profile</h2>
+                    <form id="doctorProfileForm" class="bg-white rounded-lg shadow-sm p-6 space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                                <input type="text" id="doctorName" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" value="Dr. Anil Kumar" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Specialization</label>
+                                <input type="text" id="doctorSpecialization" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" value="Cardiology" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Contact Number</label>
+                                <input type="tel" id="doctorContact" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" value="+91-98765-43210" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                                <input type="email" id="doctorEmail" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" value="anil.kumar@arogyagram.gov.in" required>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Availability Hours</label>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs text-gray-600 mb-1">Start Time</label>
+                                    <input type="time" id="startTime" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" value="09:00">
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-gray-600 mb-1">End Time</label>
+                                    <input type="time" id="endTime" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" value="17:00">
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Working Days</label>
+                            <div class="flex flex-wrap gap-2">
+                                <label class="flex items-center">
+                                    <input type="checkbox" value="monday" class="mr-2" checked>
+                                    <span class="text-sm">Monday</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" value="tuesday" class="mr-2" checked>
+                                    <span class="text-sm">Tuesday</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" value="wednesday" class="mr-2" checked>
+                                    <span class="text-sm">Wednesday</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" value="thursday" class="mr-2" checked>
+                                    <span class="text-sm">Thursday</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" value="friday" class="mr-2" checked>
+                                    <span class="text-sm">Friday</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" value="saturday" class="mr-2">
+                                    <span class="text-sm">Saturday</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" value="sunday" class="mr-2">
+                                    <span class="text-sm">Sunday</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="flex justify-end">
+                            <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Settings Page -->
+            <div id="settingsPage" class="p-4 md:p-6 hidden">
+                <div class="max-w-2xl mx-auto">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Settings</h2>
+                    <div class="bg-white rounded-lg shadow-sm p-6 space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Language</label>
+                            <select id="languageSelect" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                                <option value="en">English</option>
+                                <option value="hi">Hindi</option>
+                                <option value="bn">Bengali</option>
+                                <option value="te">Telugu</option>
+                                <option value="ta">Tamil</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Theme Mode</label>
+                            <div class="flex space-x-4">
+                                <label class="flex items-center">
+                                    <input type="radio" name="theme" value="light" class="mr-2">
+                                    <span>Light</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="theme" value="dark" class="mr-2">
+                                    <span>Dark</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="theme" value="default" class="mr-2" checked>
+                                    <span>Default</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-medium text-gray-800 mb-3">About Us</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <p class="text-sm text-gray-600 mb-2"><strong>App Name:</strong> Arogya Gram</p>
+                                <p class="text-sm text-gray-600 mb-2"><strong>Version:</strong> 1.0.0</p>
+                                <p class="text-sm text-gray-600 mb-2"><strong>Developer:</strong> Government Healthcare Initiative</p>
+                                <p class="text-sm text-gray-600">A government-supported healthcare platform providing free consultations and medicines to all citizens.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>feather.replace();</script>
+    <script>
+        // Mobile menu toggle
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('hidden');
+        });
+        
+        // Navigation functions
+        function showPage(pageName) {
+            // Hide all pages
+            document.querySelectorAll('[id$="Page"]').forEach(page => page.classList.add('hidden'));
+            // Show selected page
+            document.getElementById(pageName + 'Page').classList.remove('hidden');
+            // Update navigation active state
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('bg-green-900'));
+            event.target.closest('.nav-item').classList.add('bg-green-900');
+        }
+        
+        // Profile form handling
+        document.getElementById('doctorProfileForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = {
+                name: document.getElementById('doctorName').value,
+                specialization: document.getElementById('doctorSpecialization').value,
+                contact: document.getElementById('doctorContact').value,
+                email: document.getElementById('doctorEmail').value,
+                startTime: document.getElementById('startTime').value,
+                endTime: document.getElementById('endTime').value
+            };
+            localStorage.setItem('doctorProfile', JSON.stringify(formData));
+            alert('Profile updated successfully!');
+        });
+        
+        // Load profile data if exists
+        function loadProfileData() {
+            const profile = localStorage.getItem('doctorProfile');
+            if (profile) {
+                const data = JSON.parse(profile);
+                document.getElementById('doctorName').value = data.name || 'Dr. Anil Kumar';
+                document.getElementById('doctorSpecialization').value = data.specialization || 'Cardiology';
+                document.getElementById('doctorContact').value = data.contact || '+91-98765-43210';
+                document.getElementById('doctorEmail').value = data.email || 'anil.kumar@arogyagram.gov.in';
+                document.getElementById('startTime').value = data.startTime || '09:00';
+                document.getElementById('endTime').value = data.endTime || '17:00';
+            }
+        }
+        
+        // Initialize
+        loadProfileData();
+    </script>
+</body>
+</html>

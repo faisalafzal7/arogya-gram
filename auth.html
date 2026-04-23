@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arogya Gram - Sign In</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+</head>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
+  <div class="w-full max-w-md bg-white rounded-xl shadow p-6">
+    <div class="flex items-center justify-center mb-4 text-primary">
+      <i data-feather="heart" class="w-6 h-6 mr-2"></i>
+      <h1 class="text-xl font-bold">Arogya Gram</h1>
+    </div>
+
+    <div class="grid grid-cols-3 gap-2 mb-4">
+      <button id="tabPatient" class="py-2 rounded-lg bg-blue-600 text-white text-sm">Patient</button>
+      <button id="tabDoctor" class="py-2 rounded-lg bg-gray-100 text-gray-700 text-sm">Doctor</button>
+      <button id="tabAdmin" class="py-2 rounded-lg bg-gray-100 text-gray-700 text-sm">Admin</button>
+    </div>
+
+    <div id="panelPatient">
+      <div class="flex gap-2 mb-3">
+        <button id="btnPatLogin" class="flex-1 py-2 rounded-lg bg-blue-600 text-white text-sm">Login</button>
+        <button id="btnPatSignup" class="flex-1 py-2 rounded-lg border border-blue-600 text-blue-600 text-sm">Sign Up</button>
+      </div>
+      <div id="patientForms"></div>
+    </div>
+
+    <div id="panelDoctor" class="hidden">
+      <form id="doctorLoginForm" class="space-y-3">
+        <div>
+          <label class="block text-sm mb-1">Email</label>
+          <input type="email" class="w-full px-3 py-2 border rounded-lg" required>
+        </div>
+        <div>
+          <label class="block text-sm mb-1">Password</label>
+          <input type="password" class="w-full px-3 py-2 border rounded-lg" required>
+        </div>
+        <button class="w-full bg-green-700 text-white py-2 rounded-lg">Login</button>
+      </form>
+    </div>
+
+    <div id="panelAdmin" class="hidden">
+      <form id="adminLoginForm" class="space-y-3">
+        <div>
+          <label class="block text-sm mb-1">Email</label>
+          <input type="email" class="w-full px-3 py-2 border rounded-lg" required>
+        </div>
+        <div>
+          <label class="block text-sm mb-1">Password</label>
+          <input type="password" class="w-full px-3 py-2 border rounded-lg" required>
+        </div>
+        <button class="w-full bg-red-600 text-white py-2 rounded-lg">Login</button>
+      </form>
+    </div>
+
+    <p class="text-xs text-gray-500 mt-4 text-center">Government Healthcare Initiative</p>
+  </div>
+
+<script>
+feather.replace();
+
+function show(el){ el.classList.remove('hidden'); }
+function hide(el){ el.classList.add('hidden'); }
+function activateTab(activeBtn, others){
+  activeBtn.classList.remove('bg-gray-100','text-gray-700');
+  activeBtn.classList.add('bg-blue-600','text-white');
+  others.forEach(b=>{ b.classList.add('bg-gray-100','text-gray-700'); b.classList.remove('bg-blue-600','text-white'); });
+}
+
+// Patient forms
+function renderPatientLogin(){
+  document.getElementById('patientForms').innerHTML = `
+    <form id="patientLoginForm" class="space-y-3">
+      <div>
+        <label class="block text-sm mb-1">Email</label>
+        <input type="email" class="w-full px-3 py-2 border rounded-lg" required>
+      </div>
+      <div>
+        <label class="block text-sm mb-1">Password</label>
+        <input type="password" class="w-full px-3 py-2 border rounded-lg" required>
+      </div>
+      <button class="w-full bg-blue-700 text-white py-2 rounded-lg">Login</button>
+    </form>`;
+  document.getElementById('patientLoginForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    const name = 'Patient';
+    localStorage.setItem('patientName', name);
+    window.location.href = 'patientDashboard.html';
+  });
+}
+
+function renderPatientSignup(){
+  document.getElementById('patientForms').innerHTML = `
+    <form id="patientSignupForm" class="space-y-3">
+      <div>
+        <label class="block text-sm mb-1">Full Name</label>
+        <input id="fullName" type="text" class="w-full px-3 py-2 border rounded-lg" required>
+      </div>
+      <div>
+        <label class="block text-sm mb-1">Email</label>
+        <input id="email" type="email" class="w-full px-3 py-2 border rounded-lg" required>
+      </div>
+      <div>
+        <label class="block text-sm mb-1">Phone</label>
+        <input id="phone" type="tel" class="w-full px-3 py-2 border rounded-lg" required>
+      </div>
+      <div>
+        <label class="block text-sm mb-1">Password</label>
+        <input id="password" type="password" class="w-full px-3 py-2 border rounded-lg" required>
+      </div>
+      <button class="w-full bg-blue-700 text-white py-2 rounded-lg">Create Account</button>
+    </form>`;
+  document.getElementById('patientSignupForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    const fullName = document.getElementById('fullName').value;
+    localStorage.setItem('patientName', fullName || 'Patient');
+    window.location.href = 'patientDashboard.html';
+  });
+}
+
+// Tabs behavior
+const tabPatient = document.getElementById('tabPatient');
+const tabDoctor = document.getElementById('tabDoctor');
+const tabAdmin = document.getElementById('tabAdmin');
+const panelPatient = document.getElementById('panelPatient');
+const panelDoctor = document.getElementById('panelDoctor');
+const panelAdmin = document.getElementById('panelAdmin');
+
+tabPatient.addEventListener('click', ()=>{
+  activateTab(tabPatient, [tabDoctor, tabAdmin]);
+  show(panelPatient); hide(panelDoctor); hide(panelAdmin);
+});
+tabDoctor.addEventListener('click', ()=>{
+  activateTab(tabDoctor, [tabPatient, tabAdmin]);
+  show(panelDoctor); hide(panelPatient); hide(panelAdmin);
+});
+tabAdmin.addEventListener('click', ()=>{
+  activateTab(tabAdmin, [tabPatient, tabDoctor]);
+  show(panelAdmin); hide(panelPatient); hide(panelDoctor);
+});
+
+// Patient sub-toggle
+document.getElementById('btnPatLogin').addEventListener('click', ()=>{
+  document.getElementById('btnPatLogin').classList.add('bg-blue-600','text-white');
+  document.getElementById('btnPatSignup').classList.remove('bg-blue-600','text-white');
+  renderPatientLogin();
+});
+document.getElementById('btnPatSignup').addEventListener('click', ()=>{
+  document.getElementById('btnPatSignup').classList.add('bg-blue-600','text-white');
+  document.getElementById('btnPatLogin').classList.remove('bg-blue-600','text-white');
+  renderPatientSignup();
+});
+
+// Default view
+renderPatientLogin();
+
+// Redirects for doctor/admin
+document.getElementById('doctorLoginForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  window.location.href = 'doctor-dashboard.html';
+});
+document.getElementById('adminLoginForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  window.location.href = 'admin-dashboard.html';
+});
+
+</script>
+</body>
+</html>
+
+
